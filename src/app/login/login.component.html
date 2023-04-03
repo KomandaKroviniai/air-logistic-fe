@@ -1,0 +1,44 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<div class="container modal-dialog-centered vh-100 justify-content-center">
+
+  <div class="card bg-light" style="width: auto;"> <!--style="width: 35%;"-->
+    <article class="card-body mx-auto" style="max-width: 400px;">
+
+      <div class="d-flex justify-content-center">
+        <i class="fa fa-user fa-2xl"></i>
+      </div>
+      <h4 class="card-title mt-3 text-center">Sign in</h4>
+      <form
+        *ngIf="loginForm"
+        [formGroup]="loginForm"
+        (ngSubmit)="login()"
+      >
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text width-span"> <i class="fa fa-envelope"></i> </span>
+          </div>
+          <input formControlName="email" class="form-control" placeholder="Email address" type="email">
+        </div> <!-- form-group// -->
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text width-span"> <i class="fa fa-lock"></i> </span>
+          </div>
+          <input formControlName="password" class="form-control" placeholder="Password" type="password">
+        </div> <!-- form-group// -->
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block"> Login </button>
+        </div> <!-- form-group// -->
+      </form>
+      <div class="form-group">
+        <button routerLink="/registration" type="button" class="btn btn-outline-secondary btn-block"> Sign up </button>
+      </div>
+    </article>
+  </div> <!-- card.// -->
+
+</div>

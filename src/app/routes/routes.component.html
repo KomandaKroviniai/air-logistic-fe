@@ -1,0 +1,439 @@
+
+<div style="text-align: center; padding-top: 50px; padding-bottom: 50px;">
+  <h1 class="justify-content-center"><i class="fa-solid fa-route fa-1xl"></i>My routes</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md">
+      <!--      First column -->
+      <table class="table align-middle mb-0 bg-white table-hover">
+        <thead class="bg-light">
+        <tr>
+          <th>Id</th>
+          <th>Point A</th>
+          <th>Point B</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Checkpoints</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--  start -->
+        <tr *ngFor="let route of extendedRoutes$ | async">
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="ms-3">
+                <p class="fw-bold mb-1">{{route.id}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointA}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointB}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.startDate.toString().substring(0,10)}} {{route.startDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.endDate.toString().substring(0,10)}} {{route.endDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1" *ngFor="let comment of route.checkpoint; index as i">
+              <a href="javascript:;" mdbTooltip='{{route.checkpoint[i].date.replace("T", " ")}}' (click)="open(checkpoint, route.checkpoint[i])">{{route.checkpoint[i].description}}</a>
+            </p>
+            <p class="fw-normal mb-1">
+              <button href="javascript:;" class="badge badge-success rounded-pill d-inline" (click)="openCreateCheckpoint(createcheckpoint, route.id)" [disabled]="!isStarted(route.status)"><< Create checkpoint >></button>
+            </p>
+          </td>
+            <td>
+              <p class="badge badge-success rounded-pill d-inline">{{route.status}}</p>
+            </td>
+          <td>
+            <div style="margin-bottom: 10px;">
+
+            </div>
+          </td>
+        </tr>
+        <!--  end -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; padding-top: 50px; padding-bottom: 50px;">
+  <h1 class="justify-content-center"><i class="fa-solid fa-route fa-1xl"></i>Not assigned routes</h1>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md">
+      <!--      First column -->
+      <table class="table align-middle mb-0 bg-white table-hover">
+        <thead class="bg-light">
+        <tr>
+          <th>Id</th>
+          <th>Point A</th>
+          <th>Point B</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--  start -->
+        <tr *ngFor="let route of notAssignedRoutesList$ | async">
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="ms-3">
+                <p class="fw-bold mb-1">{{route.id}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointA}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointB}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.startDate.toString().substring(0,10)}} {{route.startDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.endDate.toString().substring(0,10)}} {{route.endDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <div style="margin-bottom: 10px;">
+
+            </div>
+          </td>
+        </tr>
+        <!--  end -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        alt=""
+        style="width: 45px; height: 45px"
+        class="rounded-circle"
+      />
+      <div class="ms-3">
+        <p class="fw-bold mb-1"></p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <form>
+    <div class="modal-body">
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span d-flex"> <i class="fa-solid fa-hashtag"></i> </span>
+        </div>
+        <input disabled
+               class="form-control"
+               placeholder="Kaunas"
+               type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-user"></i> </span>
+        </div>
+        <input
+          formControlName="firstName"
+          class="form-control"
+          placeholder="First name"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-user"></i> </span>
+        </div>
+        <input
+          formControlName="lastName"
+          class="form-control"
+          placeholder="Last name"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-phone"></i> </span>
+        </div>
+        <span class="input-group-text" id="inputGroup-sizing-default">+370</span>
+        <input
+          formControlName="phone"
+          class="form-control"
+          placeholder="Phone number"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-venus-mars"></i> </span>
+        </div>
+        <select class="form-control" formControlName="gender">
+          <option selected="" disabled> Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div> <!-- form-group end.// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-building"></i> </span>
+        </div>
+        <select class="form-control" formControlName="role">
+          <option selected="" disabled> Select job type</option>
+          <option value="Driver">Driver</option>
+          <option value="Manager">Manager</option>
+        </select>
+      </div> <!-- form-group end.// -->
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" (click)="modal.close('Delete reservation')">Update</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Dismiss')">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        alt=""
+        style="width: 45px; height: 45px"
+        class="rounded-circle"
+      />
+      <div class="ms-3">
+        <p class="fw-bold mb-1"></p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <form>
+    <div class="modal-body">
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span d-flex"> <i class="fa-solid fa-hashtag"></i> </span>
+        </div>
+        <input disabled
+               class="form-control"
+               placeholder="Kaunas"
+               type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-user"></i> </span>
+        </div>
+        <input
+          formControlName="firstName"
+          class="form-control"
+          placeholder="First name"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-user"></i> </span>
+        </div>
+        <input
+          formControlName="lastName"
+          class="form-control"
+          placeholder="Last name"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-phone"></i> </span>
+        </div>
+        <span class="input-group-text" id="inputGroup-sizing-default">+370</span>
+        <input
+          formControlName="phone"
+          class="form-control"
+          placeholder="Phone number"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-venus-mars"></i> </span>
+        </div>
+        <select class="form-control" formControlName="gender">
+          <option selected="" disabled> Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div> <!-- form-group end.// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-building"></i> </span>
+        </div>
+        <select class="form-control" formControlName="role">
+          <option selected="" disabled> Select job type</option>
+          <option value="Driver">Driver</option>
+          <option value="Manager">Manager</option>
+        </select>
+      </div> <!-- form-group end.// -->
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" (click)="modal.close('Delete reservation')">Update</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Dismiss')">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #checkpoint let-modal>
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        alt=""
+        style="width: 45px; height: 45px"
+        class="rounded-circle"
+      />
+      <div class="ms-3">
+        <p class="fw-bold mb-1">Checkpoint</p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <form
+    [formGroup]="updateCheckpoint"
+    (submit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa-solid fa-location-dot"></i> </span>
+        </div>
+        <input
+          formControlName="description"
+          class="form-control"
+          placeholder="Description"
+          type="text">
+      </div> <!-- form-group// -->
+      <div
+        *ngIf="
+                (checkpointForm.get('description')?.dirty ||
+                checkpointForm.get('description')?.touched) &&
+                checkpointForm.get('description')?.errors?.['required']
+              "
+        class="alert alert-danger">
+        Description is required.
+      </div>
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa-regular fa-calendar"></i> </span>
+        </div>
+        <input
+          formControlName="date"
+          class="form-control"
+          placeholder="Date"
+          type="datetime-local">
+      </div> <!-- form-group// -->
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" (click)="modal.close('Delete reservation')">Update</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Dismiss')">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+
+
+
+<ng-template #createcheckpoint let-modal>
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        alt=""
+        style="width: 45px; height: 45px"
+        class="rounded-circle"
+      />
+      <div class="ms-3">
+        <p class="fw-bold mb-1">Create checkpoint</p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <form
+    [formGroup]="checkpointForm"
+    (submit)="onSubmitCreateCheckpoint()"
+  >
+    <div
+      *ngIf="
+                (checkpointForm.get('routeId')?.dirty ||
+                checkpointForm.get('routeId')?.touched) &&
+                checkpointForm.get('routeId')?.errors?.['required']
+              "
+      class="alert alert-danger">
+      Route id is required.
+    </div>
+    <div class="form-group input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text width-span"> <i class="fa-solid fa-location-dot"></i> </span>
+      </div>
+      <input formControlName="description" class="form-control" placeholder="Description" type="text">
+    </div> <!-- form-group// -->
+    <div
+      *ngIf="
+                (checkpointForm.get('description')?.dirty ||
+                checkpointForm.get('description')?.touched) &&
+                checkpointForm.get('description')?.errors?.['required']
+              "
+      class="alert alert-danger">
+      Description is required.
+    </div>
+    <div class="form-group input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text width-span"> <i class="fa-regular fa-calendar"></i> </span>
+      </div>
+      <input formControlName="date" class="form-control" placeholder="Date" type="datetime-local">
+    </div> <!-- form-group// -->
+    <div
+      *ngIf="
+                (checkpointForm.get('date')?.dirty ||
+                checkpointForm.get('date')?.touched) &&
+                checkpointForm.get('date')?.errors?.['required']
+              "
+      class="alert alert-danger">
+      Date is required.
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" (click)="modal.close('Delete reservation')">Create</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Dismiss')">Cancel</button>
+    </div>
+  </form>
+</ng-template>
