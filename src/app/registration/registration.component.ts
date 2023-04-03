@@ -46,6 +46,14 @@ export class RegistrationComponent implements OnInit {
       .post(
         'http://localhost:8080/api/v1/registration',
         this.regForm.value
-      ).subscribe();
+      ).subscribe(() => {
+        this.error = false;
+        this.router.navigate(['/login'], {
+          queryParams: {registered: 'success'},
+        });
+      },
+      (error: HttpErrorResponse) => {
+        this.error = true;
+      });
   }
 }
