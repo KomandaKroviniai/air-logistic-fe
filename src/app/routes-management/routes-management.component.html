@@ -4,6 +4,70 @@
 <div class="container">
   <div class="row">
     <div class="col-md">
+      <!--      First column -->
+      <table class="table align-middle mb-0 bg-white table-hover">
+        <thead class="bg-light">
+        <tr>
+          <th>Id</th>
+          <th>Driver</th>
+          <th>Point A</th>
+          <th>Point B</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Checkpoints</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--  start -->
+        <tr *ngFor="let route of extendedRoutes$ | async">
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="ms-3">
+                <p class="fw-bold mb-1">{{route.id}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.assignedUserId}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointA}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointB}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.startDate.toString().substring(0,10)}} {{route.startDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.endDate.toString().substring(0,10)}} {{route.endDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1" *ngFor="let comment of route.checkpoint; index as i">
+              <a href="javascript:;" mdbTooltip='{{route.checkpoint[i].date.replace("T", " ")}}'>{{route.checkpoint[i].description}}</a>
+            </p>
+          </td>
+          <td>
+            <p class="badge badge-success rounded-pill d-inline">{{route.status}}</p>
+          </td>
+            <div style="margin-bottom: 10px;">
+              <button type="button" class="btn btn-outline-info btn-sm btn-rounded" (click)="open(content, route)">
+                Edit
+              </button>
+            </div>
+            <div>
+              <button type="button" class="btn btn-danger btn-sm btn-rounded" (click)="deleteRoute(this.route.id)" [disabled]="isStarted(route.status)">
+                Delete
+              </button>
+            </div>
+        </tr>
+        <!--  end -->
+        </tbody>
+      </table>
+    </div>
+
+
 
     <div class="col-md">
 
