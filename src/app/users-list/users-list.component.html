@@ -8,8 +8,8 @@
     <th>Gender</th>
     <th>Address</th>
     <th>Role</th>
-    <th>Password</th>
-    <th>Actions</th>
+    <th [hidden]="!authService.isSuperUser()">Password</th>
+    <th [hidden]="!authService.isSuperUser()">Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -38,10 +38,10 @@
       <p class="fw-normal mb-1">{{user.address}}</p>
     </td>
     <td>{{user.role}}</td>
-    <td>
+    <td [hidden]="!authService.isSuperUser()">
       <p class="fw-normal mb-1">{{user.password}}</p>
     </td>
-    <td>
+    <td [hidden]="!authService.isSuperUser()">
       <div style="margin-bottom: 10px;">
       <button type="button" class="btn btn-outline-info btn-sm btn-rounded" (click)="open(content,user)">
         Edit
