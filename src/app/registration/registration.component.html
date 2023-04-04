@@ -48,9 +48,9 @@
 
         <div
           *ngIf="
-                (regForm.get('firstName')?.dirty ||
-                regForm.get('firstName')?.touched) &&
-                regForm.get('firstName')?.errors?.['required']
+                (regForm.get('lastName')?.dirty ||
+                regForm.get('lastName')?.touched) &&
+                regForm.get('lastName')?.errors?.['required']
               "
           class="alert alert-danger">
           Last name is required.
