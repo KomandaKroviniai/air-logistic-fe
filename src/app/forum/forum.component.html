@@ -1,1 +1,146 @@
+<section class="gradient-custom">
+  <div class="container my-5 py-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xl-8">
+        <div class="card">
+          <div class="card-body p-4">
+            <h4 class="text-center mb-4 pb-2">Forum</h4>
+            <div class="row d-flex justify-content-center mb-4 pb-2">
+              <button type="button" class="btn btn-outline-primary btn-sm btn-rounded" (click)="open(content)">Create forum post</button>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="d-flex flex-start" *ngFor="let forum of extendedForum$ | async">
+                  <img class="rounded-circle shadow-1-strong me-3"
+                       src="assets/forum.png" alt="avatar" width="65"
+                       height="65" />
+                  <div class="flex-grow-1 flex-shrink-1">
+                    <div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-1">
+                          {{forum.createdBy}}
+                          <br>
+                          {{forum.title}}
+                        </p>
 
+
+
+                      </div>
+                      <p class="small mb-0">
+                        {{forum.body}}
+                      </p>
+                    </div>
+
+
+                    <div class="d-flex flex-start mt-4" *ngFor="let comment of forum.comment; index as i">
+                      <a class="me-3">
+                        <img class="rounded-circle shadow-1-strong"
+                             src="assets/comment.png" alt="avatar"
+                             width="65" height="65" />
+                      </a>
+                      <div class="flex-grow-1 flex-shrink-1">
+                        <div>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="mb-1">
+                              {{forum.comment[i].createdBy}}
+                            </p>
+
+
+                          </div>
+                          <p class="small mb-0">
+                            {{forum.comment[i].comment}}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <form
+                      [formGroup]="commentForm"
+                      (submit)="createComment(forum.id)">
+                      <div class="card-footer py-3 border-0 my-3 py-5 rounded-5" style="background-color: #f8f9fa;">
+                        <div class="d-flex flex-start w-100">
+                          <img class="rounded-circle shadow-1-strong me-3"
+                               src="assets/reply.png" alt="avatar" width="40"
+                               height="40" />
+                          <div class="form-outline w-100">
+                            <textarea formControlName="comment" class="form-control" id="textAreaExample" rows="4"
+                                      style="background: #fff;"></textarea>
+                            <label class="form-label"  for="textAreaExample">Message</label>
+                          </div>
+                        </div>
+                        <div class="float-end mt-2 pt-1">
+                          <button type="submit"
+                                  class="btn btn-primary btn-sm"
+                                  [disabled]="commentForm.invalid">Post comment</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #content let-modal>
+  <form
+    [formGroup]="forumForm"
+    (submit)="onSubmit()">
+    <div class="modal-body">
+      <h4>Create forum post</h4>
+      <div class="form-group input-group">
+        <!--      <div class="input-group-prepend">-->
+        <!--        <span class="input-group-text width-span"> <i class="fa fa-user"></i> </span>-->
+        <!--      </div>-->
+        <input
+          formControlName="title"
+          class="form-control"
+          placeholder="Title"
+          type="text">
+      </div> <!-- form-group// -->
+      <div
+        *ngIf="
+                (forumForm.get('title')?.dirty ||
+                forumForm.get('title')?.touched) &&
+                forumForm.get('title')?.errors?.['required']
+              "
+        class="alert alert-danger">
+        Title is required.
+      </div>
+
+      <div class="form-group input-group">
+        <!--      <div class="input-group-prepend">-->
+        <!--        <span class="input-group-text width-span"> <i class="fa fa-user"></i> </span>-->
+        <!--      </div>-->
+        <textarea
+          formControlName="body"
+          class="form-control"
+          placeholder="Text"
+          id="textAreaExample" rows="4">
+      </textarea>
+      </div> <!-- form-group// -->
+      <div
+        *ngIf="
+                (forumForm.get('body')?.dirty ||
+                forumForm.get('body')?.touched) &&
+                forumForm.get('body')?.errors?.['required']
+              "
+        class="alert alert-danger">
+        Text is required.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit"
+              class="btn btn-success"
+              [disabled]="forumForm.invalid"
+              (click)="modal.close('Delete reservation')">Post</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Dismiss')">Cancel</button>
+    </div>
+  </form>
+</ng-template>
