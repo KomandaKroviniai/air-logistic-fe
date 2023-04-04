@@ -81,6 +81,13 @@ export class AuthService {
     return false;
   }
 
+  public isSuperUser(): boolean {
+    if(this.isLoggedIn() && this.role === 'Admin'){
+      return true;
+    }
+    return false;
+  }
+
   public isUser(): boolean {
     if(this.isLoggedIn() && (this.role === 'Driver' || this.role === 'Admin')){
       return true;
