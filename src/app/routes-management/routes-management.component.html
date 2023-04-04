@@ -1,4 +1,283 @@
-
 <div style="text-align: center; padding-top: 50px; padding-bottom: 50px;">
   <h1 class="justify-content-center"><i class="fa-solid fa-route fa-1xl"></i> Routes management</h1>
 </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md">
+      <!--      First column -->
+      <table class="table align-middle mb-0 bg-white table-hover">
+        <thead class="bg-light">
+        <tr>
+          <th>Id</th>
+          <th>Driver</th>
+          <th>Point A</th>
+          <th>Point B</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Checkpoints</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--  start -->
+        <tr *ngFor="let route of extendedRoutes$ | async">
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="ms-3">
+                <p class="fw-bold mb-1">{{route.id}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.assignedUserId}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointA}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.pointB}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.startDate.toString().substring(0,10)}} {{route.startDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{route.endDate.toString().substring(0,10)}} {{route.endDate.toString().substring(14,19)}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1" *ngFor="let comment of route.checkpoint; index as i">
+              <a href="javascript:;" mdbTooltip='{{route.checkpoint[i].date.replace("T", " ")}}'>{{route.checkpoint[i].description}}</a>
+            </p>
+          </td>
+          <td>
+            <p class="badge badge-success rounded-pill d-inline">{{route.status}}</p>
+          </td>
+            <div style="margin-bottom: 10px;">
+              <button type="button" class="btn btn-outline-info btn-sm btn-rounded" (click)="open(content, route)">
+                Edit
+              </button>
+            </div>
+            <div>
+              <button type="button" class="btn btn-danger btn-sm btn-rounded" (click)="deleteRoute(this.route.id)" [disabled]="isStarted(route.status)">
+                Delete
+              </button>
+            </div>
+        </tr>
+        <!--  end -->
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <div class="col-md">
+
+      <div style="text-align: center">
+        <h2>Create new route</h2>
+      </div>
+
+      <form
+        [formGroup]="routeForm"
+        (submit)="onSubmitCreateRoute()"
+      >
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text width-span"> <i class="fa-solid fa-location-dot"></i> </span>
+          </div>
+          <input formControlName="pointA" name="" class="form-control" placeholder="Point A" type="email">
+        </div> <!-- form-group// -->
+        <div
+          *ngIf="
+                (routeForm.get('pointA')?.dirty ||
+                routeForm.get('pointA')?.touched) &&
+                routeForm.get('pointA')?.errors?.['required']
+              "
+          class="alert alert-danger">
+          Point A is required.
+        </div>
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text width-span"> <i class="fa-solid fa-location-dot"></i> </span>
+          </div>
+          <input formControlName="pointB" class="form-control" placeholder="Point B" type="text">
+        </div> <!-- form-group// -->
+        <div
+          *ngIf="
+                (routeForm.get('pointB')?.dirty ||
+                routeForm.get('pointB')?.touched) &&
+                routeForm.get('pointB')?.errors?.['required']
+              "
+          class="alert alert-danger">
+          Point B is required.
+        </div>
+        Start date
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text width-span"> <i class="fa-regular fa-calendar"></i> </span>
+          </div>
+          <input formControlName="startDate" class="form-control" placeholder="Start Date" type="datetime-local">
+        </div> <!-- form-group// -->
+        <div
+          *ngIf="
+                (routeForm.get('startDate')?.dirty ||
+                routeForm.get('startDate')?.touched) &&
+                routeForm.get('startDate')?.errors?.['required']
+              "
+          class="alert alert-danger">
+          Start date is required.
+        </div>
+        End date
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text width-span"> <i class="fa-regular fa-calendar"></i> </span>
+          </div>
+          <input formControlName="endDate" class="form-control" placeholder="End Date" type="datetime-local">
+        </div> <!-- form-group// -->
+        <div
+          *ngIf="
+                (routeForm.get('endDate')?.dirty ||
+                routeForm.get('endDate')?.touched) &&
+                routeForm.get('endDate')?.errors?.['required']
+              "
+          class="alert alert-danger">
+          End date is required.
+        </div>
+
+        Status
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text width-span"> <i class="fa-solid fa-circle-info"></i> </span>
+          </div>
+          <select class="form-control" formControlName="status">
+            <option selected="" disabled> Select status</option>
+            <option value="Created">Created</option>
+            <option value="Started">Started</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div> <!-- form-group end.// -->
+        <div
+          *ngIf="
+                (routeForm.get('status')?.dirty ||
+                routeForm.get('status')?.touched) &&
+                routeForm.get('status')?.errors?.['required']
+              "
+          class="alert alert-danger">
+          Status is required.
+        </div>
+
+        <div class="form-group">
+          <button type="submit"
+                  class="btn btn-primary btn-block"
+                  [disabled]="routeForm.invalid"> Create </button>
+        </div> <!-- form-group// -->
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        alt=""
+        style="width: 45px; height: 45px"
+        class="rounded-circle"
+      />
+      <div class="ms-3">
+        <p class="fw-bold mb-1">Checkpoint</p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <form
+    [formGroup]="updateRoute"
+    (submit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span d-flex"> <i class="fa-solid fa-hashtag"></i> </span>
+        </div>
+        <input disabled
+               class="form-control"
+               placeholder="Id"
+               [value]="this.route.id"
+               type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa fa-user"></i> </span>
+        </div>
+        <input
+          formControlName="assignedUserId"
+          class="form-control"
+          placeholder="Driver id"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa-solid fa-location-dot"></i> </span>
+        </div>
+        <input
+          formControlName="pointA"
+          class="form-control"
+          placeholder="Point A"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa-solid fa-location-dot"></i> </span>
+        </div>
+        <input
+          formControlName="pointB"
+          class="form-control"
+          placeholder="Point B"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa-regular fa-calendar"></i> </span>
+        </div>
+        <input
+          formControlName="startDate"
+          class="form-control"
+          placeholder="Start date"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa-regular fa-calendar"></i> </span>
+        </div>
+        <input
+          formControlName="endDate"
+          class="form-control"
+          placeholder="End date"
+          type="text">
+      </div> <!-- form-group// -->
+
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text width-span"> <i class="fa-solid fa-circle-info"></i> </span>
+        </div>
+        <select class="form-control" formControlName="status">
+          <option selected="" disabled> Select status</option>
+          <option value="Created">Created</option>
+          <option value="Started">Started</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div> <!-- form-group end.// -->
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" (click)="modal.close('Delete reservation')">Update</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Dismiss')">Cancel</button>
+    </div>
+  </form>
+</ng-template>
