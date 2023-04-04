@@ -92,11 +92,7 @@
             placeholder="Create password"
             type="password">
         </div> <!-- form-group// -->
-        <div
-          class="alert alert-danger"
-          *ngIf="
-                  regForm.get('password')?.errors?.['pattern']"
-        >
+        <div class="alert alert-danger" *ngIf="regForm.get('password')?.errors?.['pattern']">
           Password should contain at least 1 digit and 1 uppercase
           letter.
         </div>
