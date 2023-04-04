@@ -19,7 +19,6 @@ export class RoutesComponent implements OnInit {
   routesList$: Observable<Route[]> = of();
   notAssignedRoutesList$: Observable<Route[]> = of();
   checkpointList$: Observable<Checkpoint[]> = of();
-  // checkpointListById$: Observable<Checkpoint[]> = of();
   extendedRoutes$: Observable<any[]> = of();
 
   checkpoint: Checkpoint = {
@@ -61,12 +60,10 @@ export class RoutesComponent implements OnInit {
 
   loadRoutes(): void {
     this.routesList$ = this.routesService.loadRoutesByAssignedUserId().pipe();
-    console.log(this.routesList$);
   }
 
   loadNotAssignedRoutes(): void {
     this.notAssignedRoutesList$ = this.routesService.loadRoutesByAssignedUserIdIsEmpty().pipe();
-    console.log(this.notAssignedRoutesList$);
   }
 
   loadRoutesWithCheckpoints(): void {
@@ -79,8 +76,6 @@ export class RoutesComponent implements OnInit {
         }));
       }),
     );
-
-    console.log(this.extendedRoutes$.pipe());
   }
 
   assignRoute(id: bigint) {
