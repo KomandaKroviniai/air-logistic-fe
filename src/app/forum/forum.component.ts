@@ -119,4 +119,19 @@ export class ForumComponent implements OnInit {
     window.location.reload();
   }
 
+  deleteComment(id: bigint){
+    this.commentService.deleteComment(id);
+    window.location.reload();
+  }
+
+  deleteForum(id: bigint){
+    this.forumService.deleteForum(id);
+    window.location.reload();
+  }
+
+  // deleteUser(id: bigint){
+  //   this.forumService.deleteUser(id);
+  //   window.location.reload();
+  // }
+
 }
