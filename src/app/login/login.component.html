@@ -7,7 +7,7 @@
 
 <div class="container modal-dialog-centered vh-100 justify-content-center">
 
-  <div class="card bg-light" style="width: auto;"> <!--style="width: 35%;"-->
+  <div class="card bg-light" style="width: auto;">
     <article class="card-body mx-auto" style="max-width: 400px;">
 
       <div class="d-flex justify-content-center">
@@ -31,14 +31,18 @@
           </div>
           <input formControlName="password" class="form-control" placeholder="Password" type="password">
         </div> <!-- form-group// -->
+        <div class="pt-2">
+          <div class="alert alert-danger mt-3" *ngIf="isLoginFailed">
+            Login failed. Email or password is incorrect!
+          </div>
+        </div>
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block"> Login </button>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
         </div> <!-- form-group// -->
       </form>
       <div class="form-group">
-        <button routerLink="/registration" type="button" class="btn btn-outline-secondary btn-block"> Sign up </button>
+        <button routerLink="/registration" type="button" class="btn btn-outline-secondary btn-block">Sign up</button>
       </div>
     </article>
   </div> <!-- card.// -->
-
 </div>
