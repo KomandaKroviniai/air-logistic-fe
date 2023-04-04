@@ -15,18 +15,34 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'ataskaita', component: DiagramComponent,
-    canActivate:[AuthGuard],},
+    canActivate:[AuthGuard],
+    data: {
+      role: 'Manager',
+      superUser: 'Admin'
+  }},
   {path: 'users', component: UsersListComponent,
     canActivate:[AuthGuard],
+    data: {
+      role: 'Manager',
+      superUser: 'Admin'
+    }
   },
   {path: 'routes-management', component: RoutesManagementComponent,
     canActivate:[AuthGuard],
+    data: {
+      role: 'Manager',
+      superUser: 'Admin'
+    }
   },
   {path: 'forum', component: ForumComponent, canActivate:[AuthGuard]},
   {path: 'checkpoints', component: CheckpointsComponent, canActivate:[AuthGuard]
   },
   {path: 'routes', component: RoutesComponent,
     canActivate:[AuthGuard],
+    data: {
+      role: 'Driver',
+      superUser: 'Admin'
+    }
   }
 ];
 
