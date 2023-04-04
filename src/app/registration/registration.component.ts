@@ -36,7 +36,8 @@ export class RegistrationComponent implements OnInit {
       phone: ['', [Validators.required]],
       gender: ['Gender', [Validators.required]],
       role: ['Select job type', [Validators.required]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required,
+        Validators.pattern(RegExp('(?=.*[0-9])(?=.*[A-Z])'))]],
       address: ['']
     })
   }
