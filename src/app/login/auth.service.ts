@@ -82,7 +82,8 @@ export class AuthService {
   }
 
   public isSuperUser(): boolean {
-    if(this.isLoggedIn() && this.role === 'Admin'){
+    if(this.isLoggedIn() && this.role === 'Admin')
+    {
       return true;
     }
     return false;
