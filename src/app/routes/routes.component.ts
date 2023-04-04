@@ -6,7 +6,6 @@ import {Checkpoint} from "../shared/Checkpoint";
 import {CheckpointService} from "../services/checkpoint.service";
 import {RoutesService} from "../services/routes.service";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {User} from "../shared/user";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -18,8 +17,6 @@ export class RoutesComponent implements OnInit {
 
   routesList$: Observable<Route[]> = of();
   notAssignedRoutesList$: Observable<Route[]> = of();
-  checkpointList$: Observable<Checkpoint[]> = of();
-  // checkpointListById$: Observable<Checkpoint[]> = of();
   extendedRoutes$: Observable<any[]> = of();
 
   checkpoint: Checkpoint = {
@@ -147,17 +144,13 @@ export class RoutesComponent implements OnInit {
   }
 
   isStartedOrCompleted(status: string): boolean{
-    if(status == "Completed" || status == "Started"){
-      return true;
-    }
-    return false;
+    return status == "Completed" || status == "Started";
+
   }
 
   isStarted(status: string): boolean{
-    if(status == "Started"){
-      return true;
-    }
-    return false;
+    return status == "Started";
+
   }
 
   onSubmitCreateCheckpoint() {
