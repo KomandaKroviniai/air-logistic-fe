@@ -4,7 +4,6 @@ import {Forum} from "../shared/Forum";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ForumService} from "../services/forum.service";
 import {CommentService} from "../services/comment.service";
-import {User} from "../shared/user";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../login/auth.service";
 
@@ -28,7 +27,6 @@ export class ForumComponent implements OnInit {
     body: '',
     createdBy: ''
   }
-
 
   comment: any[] = {
     // @ts-ignore
@@ -128,10 +126,4 @@ export class ForumComponent implements OnInit {
     this.forumService.deleteForum(id);
     window.location.reload();
   }
-
-  // deleteUser(id: bigint){
-  //   this.forumService.deleteUser(id);
-  //   window.location.reload();
-  // }
-
 }
